@@ -11,8 +11,8 @@ Model name is converted to lowercase for the collection name:
 - BlogPost -> "blogs" collection
 """
 
-from pydantic import BaseModel, Field
-from typing import Optional
+from pydantic import BaseModel, Field, HttpUrl
+from typing import Optional, List
 
 # Example schemas (replace with your own):
 
@@ -37,6 +37,35 @@ class Product(BaseModel):
     price: float = Field(..., ge=0, description="Price in dollars")
     category: str = Field(..., description="Product category")
     in_stock: bool = Field(True, description="Whether product is in stock")
+
+# News website schemas
+
+class Article(BaseModel):
+    """
+    Political news articles
+    Collection name: "article"
+    """
+    title: str = Field(..., description="Headline")
+    summary: Optional[str] = Field(None, description="Short summary/dek")
+    content: str = Field(..., description="Full article content (markdown or plain text)")
+    category: str = Field(..., description="Topic/category, e.g., Elections, Policy, Diplomacy")
+    region: str = Field(..., description="Region or country, e.g., Global, USA, EU, Asia")
+    tags: List[str] = Field(default_factory=list, description="Keywords/tags")
+    author: Optional[str] = Field(None, description="Author name")
+    image_url: Optional[str] = Field(None, description="Hero image URL")
+    published: bool = Field(True, description="Whether the article is published")
+    published_at: Optional[str] = Field(None, description="ISO timestamp for publication time")
+
+class Project(BaseModel):
+    """
+    Projects you want to showcase related to the news site
+    Collection name: "project"
+    """
+    name: str = Field(..., description="Project name")
+    description: str = Field(..., description="What the project is about")
+    link: Optional[str] = Field(None, description="External link to project")
+    tags: List[str] = Field(default_factory=list, description="Keywords/tags")
+    status: str = Field("active", description="Status: active, paused, completed")
 
 # Add your own schemas here:
 # --------------------------------------------------
